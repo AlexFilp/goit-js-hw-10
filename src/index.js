@@ -29,6 +29,7 @@ function onInput(e) {
     return;
   }
   fetchCountries(input).then(data => {
+    console.log(data);
     if (data.length > 10) {
       Notify.info('Too many matches found. Please enter a more specific name.');
     } else if (data.length >= 2 && data.length <= 10) {
