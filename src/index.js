@@ -25,6 +25,9 @@ function onInput(e) {
   refs.countryInfo.innerHTML = '';
   refs.countryList.innerHTML = '';
   const input = e.target.value.trim();
+  if (input === '') {
+    return;
+  }
   fetchCountries(input).then(data => {
     if (data.length > 10) {
       Notify.info('Too many matches found. Please enter a more specific name.');
