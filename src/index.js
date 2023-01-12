@@ -57,8 +57,7 @@ function onInput(e) {
       }</span></p>
       <p class="country-text">Languages: <span class="country-span">${Object.values(
         country.languages
-      )
-      .join(', ')}</span></p>`;
+      ).join(', ')}</span></p>`;
     }
   });
 }
