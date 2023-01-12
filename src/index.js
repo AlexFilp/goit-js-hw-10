@@ -55,11 +55,10 @@ function onInput(e) {
       <p class="country-text">Population: <span class="country-span">${
         country.population
       }</span></p>
-      <p class="country-text">Languages: <span class="country-span">${Object.keys(
+      <p class="country-text">Languages: <span class="country-span">${Object.values(
         country.languages
       )
-        .map(lang => country.languages[lang])
-        .join(', ')}</span></p>`;
+      .join(', ')}</span></p>`;
     }
   });
 }
