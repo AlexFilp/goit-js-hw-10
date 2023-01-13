@@ -1,7 +1,7 @@
 import './css/styles.css';
 import debounce from 'lodash.debounce';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-import { fetchCountries } from './fetchCountries';
+import { fetchCountries } from './asyncFetchCountries';
 
 Notify.init({
   position: 'center-top',
@@ -28,22 +28,28 @@ function onInput(e) {
   if (input === '') {
     return;
   }
-  fetchCountries(input).then(data => {
-    console.log(data);
-    if (data.length > 10) {
-      Notify.info('Too many matches found. Please enter a more specific name.');
-    } else if (data.length >= 2 && data.length <= 10) {
-      const countries = data
-        .map(
-          item =>
-            `<li class="country-item"><img src="${item.flags.svg}" alt="flag" width="50" height="40"> ${item.name.common}</li>`
-        )
-        .join('');
+  fetchCountries(input)
+    .then(fetchedCountries => {
+      console.log(fetchedCountries);
+      if (fetchedCountries.length > 10) {
+        Notify.info(
+          'Too many matches found. Please enter a more specific name.'
+        );
+      } else if (
+        fetchedCountries.length >= 2 &&
+        fetchedCountries.length <= 10
+      ) {
+        const countries = fetchedCountries
+          .map(
+            item =>
+              `<li class="country-item"><img src="${item.flags.svg}" alt="flag" width="50" height="40"> ${item.name.common}</li>`
+          )
+          .join('');
 
-      refs.countryList.innerHTML = countries;
-    } else {
-      const country = data[0];
-      refs.countryInfo.innerHTML = `<h1 class="country-title">
+        refs.countryList.innerHTML = countries;
+      } else {
+        const country = fetchedCountries[0];
+        refs.countryInfo.innerHTML = `<h1 class="country-title">
         <img class="country-img" src="${
           country.flags.svg
         }" alt="flag" width="120" />
@@ -58,6 +64,7 @@ function onInput(e) {
       <p class="country-text">Languages: <span class="country-span">${Object.values(
         country.languages
       ).join(', ')}</span></p>`;
-    }
-  });
+      }
+    })
+    .catch(error => console.log(error.name));
 }
